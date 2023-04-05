@@ -1,7 +1,7 @@
 # https://github.com/meidachen/STPLS3D/blob/main/HAIS/data/prepare_data_inst_instance_stpls3d.py
 import numpy as np
 import pandas as pd
-import torch
+#import torch
 
 import glob
 import json
