@@ -57,7 +57,7 @@ data:
 
 dataloader:
   train:
-    batch_size: 32
+    batch_size: 64
     num_workers: 16
   test:
     batch_size: 1

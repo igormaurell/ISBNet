@@ -93,3 +93,5 @@ dataset/stpls3d/Synthetic_v3_InstanceSegmentation
 work_dirs/
 pretrains/
 results/
+
+segmentator/

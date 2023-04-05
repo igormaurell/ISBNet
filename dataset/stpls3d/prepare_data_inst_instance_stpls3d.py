@@ -90,7 +90,7 @@ def preparePthFiles(files, split, outPutFolder, AugTimes=0, crop_size=50):
             blocks = splitPointCloud(points, size=crop_size, stride=crop_size)
             for blockNum, block in enumerate(blocks):
                 if len(block) > 10000:
-                    outFilePath = os.path.join(outPutFolder, name + str(blockNum) + "_inst_nostuff.pth")
+                    outFilePath = os.path.join(outPutFolder, name + str(blockNum) + "_inst_nostuff.txt")
                     if block[:, 2].max(0) - block[:, 2].min(0) < zThreshold:
                         block = np.append(
                             block,
@@ -154,9 +154,11 @@ def preparePthFiles(files, split, outPutFolder, AugTimes=0, crop_size=50):
                             print()
                             counter += 1
                         else:
-                            torch.save((coords, colors, sem_labels, instance_labels), outFilePath)
+                            np.savetxt(outFilePath, np.hstack((coords, colors, sem_labels.reshape(len(sem_labels), 1), instance_labels.reshape(len(instance_labels), 1))))
+                            #torch.save((coords, colors, sem_labels, instance_labels), outFilePath)
                     else:
-                        torch.save((coords, colors), outFilePath)
+                        np.savetxt(outFilePath, np.hstack((coords, colors)))
+                        #torch.save((coords, colors), outFilePath)
     print("Total skipped file :%d" % counter)
     json.dump(coordShift, open(outJsonPath, "w"))
 
@@ -167,13 +169,13 @@ if __name__ == "__main__":
 
     trainSplit = [1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 16, 17, 18, 19, 21, 22, 23, 24]
     trainFiles = getFiles(filesOri, trainSplit)
-    split = "train"
+    split = "train_view"
     trainOutDir = split
     os.makedirs(trainOutDir, exist_ok=True)
     preparePthFiles(trainFiles, split, trainOutDir, AugTimes=6)
 
     valSplit = [5, 10, 15, 20, 25]
-    split = "val_250m"
+    split = "val_view"
     valFiles = getFiles(filesOri, valSplit)
     valOutDir = split
     os.makedirs(valOutDir, exist_ok=True)
